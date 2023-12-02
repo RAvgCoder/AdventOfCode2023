@@ -11,15 +11,13 @@ private fun part1(lines: List<String>) {
     )
 }
 
-private val numMap = mapOf(
-    "one" to 1, "two" to 2, "three" to 3, "four" to 4, "five" to 5, "six" to 6, "seven" to 7, "eight" to 8, "nine" to 9
-)
-
 private fun part2(lines: List<String>) {
     println(lines.sumOf { count(it) })
 }
 
-
+private val numMap = listOf(
+    "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
+)
 
 private fun count(str: String): Int {
     // Initialize count to a high value
@@ -31,52 +29,52 @@ private fun count(str: String): Int {
     var idx: Int // Initialize index variable
 
     // Check for the first num in the string
-    numMap.forEach { (numStr, numVal) ->
-        // Find the index of numStr in the string
-        idx = str.indexOf(numStr)
+    numMap.forEachIndexed { numVal, numStr ->
+            // Find the index of numStr in the string
+            idx = str.indexOf(numStr)
 
-        // If the index is valid and within the current count limit
-        if (idx >= 0 && idx in 0..count.coerceAtMost(idx)) {
-            firstNum = numMap[numStr]!! // Update left-hand side number
-        }
+            // If the index is valid and within the current count limit
+            if (idx >= 0 && idx in 0..count.coerceAtMost(idx)) {
+                firstNum = (numVal+1) // Update left-hand side number
+            }
 
-        // Update the count with the minimum of current count and index
-        count = if (count.coerceAtMost(idx) == -1) count else count.coerceAtMost(idx)
+            // Update the count with the minimum of current count and index
+            count = if (count.coerceAtMost(idx) == -1) count else count.coerceAtMost(idx)
 
-        // Find the index of numVal in the string
-        idx = str.indexOf("$numVal")
+            // Find the index of numVal in the string
+            idx = str.indexOf("${numVal+1}")
 
-        // If the index is valid and within the current count limit
-        if (idx >= 0 && idx in 0..count.coerceAtMost(idx)) {
-            firstNum = numVal // Update left-hand side number
-        }
+            // If the index is valid and within the current count limit
+            if (idx >= 0 && idx in 0..count.coerceAtMost(idx)) {
+                firstNum = (numVal+1) // Update left-hand side number
+            }
 
-        // Update the count with the minimum of current count and index
-        count = if (count.coerceAtMost(idx) == -1) count else count.coerceAtMost(idx)
+            // Update the count with the minimum of current count and index
+            count = if (count.coerceAtMost(idx) == -1) count else count.coerceAtMost(idx)
     }
 
     // Reset count to a low value
     count = Int.MIN_VALUE
 
     // Check for the last num in the string
-    numMap.forEach { (numStr, numVal) ->
+    numMap.forEachIndexed { numVal, numStr ->
         // Find the last index of numStr in the string
         idx = str.lastIndexOf(numStr)
 
         // If the count is less than the index and the index is valid
         if (count < count.coerceAtLeast(idx) && idx >= 0) {
-            lastNum = numMap[numStr]!! // Update right-hand side number
+            lastNum = (numVal+1) // Update right-hand side number
         }
 
         // Update the count with the maximum of current count and index
         count = count.coerceAtLeast(idx)
 
         // Find the last index of numVal in the string
-        idx = count.coerceAtLeast(str.lastIndexOf("$numVal"))
+        idx = count.coerceAtLeast(str.lastIndexOf("${numVal+1}"))
 
-        // If the count is less than the index and the index is valid
+        // If the count is less than the index and the index are valid
         if (count < count.coerceAtLeast(idx) && idx >= 0) {
-            lastNum = numVal // Update right-hand side number
+            lastNum = (numVal+1) // Update right-hand side number
         }
 
         // Update the count with the maximum of current count and index
