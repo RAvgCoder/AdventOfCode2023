@@ -1,12 +1,11 @@
 fun main() {
-    part1()
-    part2()
+    part1(MyArray.readFile(1, 1))
+    part2(MyArray.readFile(1, 1))
 }
 
-private fun part1() {
+private fun part1(lines: List<String>) {
     println(
-        MyArray.readFile(1, 1)
-            .sumOf {
+        lines.sumOf {
                 str -> "${str.find { it.isDigit() }}${str.findLast { it.isDigit() }}".toInt()
             }
     )
@@ -16,13 +15,10 @@ private val numMap = mapOf(
     "one" to 1, "two" to 2, "three" to 3, "four" to 4, "five" to 5, "six" to 6, "seven" to 7, "eight" to 8, "nine" to 9
 )
 
-private fun part2() {
-    println(
-        MyArray.readFile(1, 2)
-            .map(::count)
-            .sum()
-    )
+private fun part2(lines: List<String>) {
+    println(lines.sumOf { count(it) })
 }
+
 
 
 private fun count(str: String): Int {
