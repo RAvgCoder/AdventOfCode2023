@@ -1,3 +1,6 @@
+/**
+ * https://adventofcode.com/2023/day/1
+ */
 fun main() {
     part1(MyArray.readFile(1))
     part2(MyArray.readFile(1))
