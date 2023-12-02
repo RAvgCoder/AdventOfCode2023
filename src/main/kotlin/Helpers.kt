@@ -6,22 +6,21 @@ object MyArray {
      * Reads a file and returns its content as a list of strings.
      *
      * @param dayNum the day number of the file (e.g., 1 for day1)
-     * @param dayPart the part number of the file (e.g., 2 for part2). Defaults to -1 if not provided.
      * @return a list of strings containing the content of the file
      */
-    fun readFile(dayNum: Int, dayPart: Int = -1): List<String> {
+    fun readFile(dayNum: Int = -1): List<String> {
         // Uses this to get the base dir eg "~/.../WordPuzzleSolver"
         var currentDirectory = System.getProperty("user.dir")
 
         if (!currentDirectory.endsWith("src")) currentDirectory += "/src"
 
-        // day1part2.txt
+        // day1.txt
         val filePath =
             "$currentDirectory/main/resources/${
-                if (dayPart == -1)
+                if (dayNum == -1)
                     "Example"
                 else
-                    "day${dayNum}part${dayPart}"
+                    "day${dayNum}"
             }.txt"
 
         return mutableListOf<String>().also { File(filePath).forEachLine { line -> it.add(line) } }
