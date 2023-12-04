@@ -2,10 +2,11 @@ import java.io.File
 import kotlin.time.measureTimedValue
 
 object MyArray {
-    fun runPart(dayRun: (List<StringBuilder>) -> Unit, dayNum: Int = -1, partNum: Int) {
+    fun runPart(dayRun: (List<StringBuilder>) -> Unit, partNum: Int, dayNum: Int = -1) {
         println("//------------[Day $dayNum Part $partNum]------------\\\\")
+        val readFile = readFile(dayNum)
         val (_, time1) = measureTimedValue {
-            dayRun(readFile(dayNum))
+            dayRun(readFile)
         }
         println("Time: ${time1.inWholeMilliseconds}ms\n")
     }

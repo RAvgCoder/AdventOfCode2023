@@ -3,7 +3,7 @@
  */
 fun main() {
     MyArray.runPart(::part1, 1, 1)
-    MyArray.runPart(::part2, 1, 2)
+    MyArray.runPart(::part2, 2, 1)
 }
 
 private fun part1(lines: List<StringBuilder>) {

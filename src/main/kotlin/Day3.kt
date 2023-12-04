@@ -1,6 +1,6 @@
 fun main() {
-    MyArray.runPart(::part1, 3, 1)
-    MyArray.runPart(::part2, 3, 2)
+    MyArray.runPart(::part1, 1, 3)
+    MyArray.runPart(::part2,  2,3)
 }
 
 private fun part1(readFile: List<StringBuilder>) {

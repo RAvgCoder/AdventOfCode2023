@@ -2,7 +2,7 @@
  * https://adventofcode.com/2023/day/2
  */
 fun main() {
-    MyArray.runPart(::part1,2,1)
+    MyArray.runPart(::part1,1,2)
     MyArray.runPart(::part2,2,2)
 }
 
