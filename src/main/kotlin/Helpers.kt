@@ -1,6 +1,14 @@
 import java.io.File
+import kotlin.time.measureTimedValue
 
 object MyArray {
+    fun runPart(dayRun: (List<StringBuilder>) -> Unit, dayNum: Int = -1, partNum: Int) {
+        println("//------------[Day $dayNum Part $partNum]------------\\\\")
+        val (_, time1) = measureTimedValue {
+            dayRun(readFile(dayNum))
+        }
+        println("Time: ${time1.inWholeMilliseconds}ms\n")
+    }
 
     /**
      * Reads a file and returns its content as a list of strings.
@@ -8,7 +16,7 @@ object MyArray {
      * @param dayNum the day number of the file (e.g., 1 for day1)
      * @return a list of strings containing the content of the file
      */
-    fun readFile(dayNum: Int = -1): List<String> {
+    private fun readFile(dayNum: Int = -1): List<StringBuilder> {
         // Uses this to get the base dir eg "~/.../WordPuzzleSolver"
         var currentDirectory = System.getProperty("user.dir")
 
@@ -23,7 +31,13 @@ object MyArray {
                     "day${dayNum}"
             }.txt"
 
-        return mutableListOf<String>().also { File(filePath).forEachLine { line -> it.add(line) } }
+        return mutableListOf<StringBuilder>()
+            .also {
+                File(filePath)
+                    .forEachLine {
+                        line -> it.add(StringBuilder(line))
+                    }
+            }
     }
 
     /**
