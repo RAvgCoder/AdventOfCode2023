@@ -1,20 +1,9 @@
-import kotlin.time.measureTimedValue
-
 fun main() {
-    val (_, time1) = measureTimedValue {
-        part1(MyArray.readFile(3))
-    }
-    println("Time taken for part1 is $time1")
-
-    println()
-
-    val (_, time2) = measureTimedValue {
-        part2(MyArray.readFile(3))
-    }
-    println("Time taken for part2 is $time2")
+    MyArray.runPart(::part1, 3, 1)
+    MyArray.runPart(::part2, 3, 2)
 }
 
-private fun part1(readFile: List<String>) {
+private fun part1(readFile: List<StringBuilder>) {
     var sum = 0 // Initialize the sum of part numbers
     var currNumber = 0 // Initialize the current number being processed
     val startingCoordinates = arrayOf(0, 0) // Array to store starting coordinates
@@ -57,7 +46,7 @@ private fun part1(readFile: List<String>) {
     println("Sum of all of the part numbers in the engine schematic is $sum")
 }
 
-private fun isValidPart(readFile: List<String>, pos: Array<Int>, currNumber: Int): Boolean {
+private fun isValidPart(readFile: List<StringBuilder>, pos: Array<Int>, currNumber: Int): Boolean {
     // Calculate the number of digits in the current number
     val numDigits = currNumber.toString().length
 
@@ -82,7 +71,7 @@ private fun isValidPart(readFile: List<String>, pos: Array<Int>, currNumber: Int
     return false // If no non-digit, non-dot character is found, consider the part invalid
 }
 
-private fun part2(input: List<String>) {
+private fun part2(input: List<StringBuilder>) {
     // Convert the input to a mutable list of strings
     val readFile = input.toMutableList()
 
@@ -98,7 +87,7 @@ private fun part2(input: List<String>) {
             sum += findGears(i, starPos, readFile)
 
             // Replace the '*' character with a '.' character in the current string
-            readFile[i] = StringBuilder(readFile[i]).apply { set(starPos, '.') }.toString()
+            readFile[i][starPos] = '.'
 
             // Find the index of the next '*' character in the current string
             starPos = readFile[i].indexOfFirst { it == '*' }
@@ -119,7 +108,7 @@ val directions = arrayOf(
     intArrayOf(0, -1),
 )
 
-fun findGears(yCoord: Int, xCoord: Int, readFile: List<String>): Int {
+fun findGears(yCoord: Int, xCoord: Int, readFile: List<StringBuilder>): Int {
     val gears: MutableList<Triple<Int, IntRange, Int>> = mutableListOf()
 
     for (dir in directions) {
@@ -155,7 +144,7 @@ fun isRange(gears: MutableList<Triple<Int, IntRange, Int>>, xOffset: Int, yOffse
     return false
 }
 
-fun extractInt(xOffset: Int, str: String): Pair<Int, IntRange> {
+fun extractInt(xOffset: Int, str: StringBuilder): Pair<Int, IntRange> {
     // Initialize left and right pointers and characters with the starting offset
     var l = xOffset
     var r = xOffset

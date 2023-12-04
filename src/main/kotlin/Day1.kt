@@ -2,25 +2,27 @@
  * https://adventofcode.com/2023/day/1
  */
 fun main() {
-    part1(MyArray.readFile(1))
-    part2(MyArray.readFile(1))
+    MyArray.runPart(::part1, 1, 1)
+    MyArray.runPart(::part2, 1, 2)
 }
 
-private fun part1(lines: List<String>) {
-    println(lines.sumOf { str ->
-        "${str.find { it.isDigit() }}${str.findLast { it.isDigit() }}".toInt()
-    })
+private fun part1(lines: List<StringBuilder>) {
+    println("Sum of all of the calibration values is ${
+        lines.sumOf { str ->
+            "${str.find { it.isDigit() }}${str.findLast { it.isDigit() }}".toInt()
+        }
+    }")
 }
 
-private fun part2(lines: List<String>) {
-    println(lines.sumOf { count(it) })
+private fun part2(lines: List<StringBuilder>) {
+    println("Sum of all of the calibration values is ${lines.sumOf { count(it) }}")
 }
 
 private val numMap = listOf(
     "one", "two", "three", "four", "five", "six", "seven", "eight", "nine"
 )
 
-private fun count(str: String): Int {
+private fun count(str: StringBuilder): Int {
     // Initialize count to a high value
     var count = Int.MAX_VALUE
 
