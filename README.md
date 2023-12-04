@@ -8,10 +8,6 @@ This repository contains my solutions to the coding challenges presented in Adve
 ## Structure
 Solutions: `src\main\kotlin`
 
-## Instructions for Running Code
-To run the Python solutions, ensure you have Python installed.
-For Java solutions, use an IDE like IntelliJ or compile using `javac`.
-
 ## Usage
 Feel free to explore, use, or contribute to this repository! If you have suggestions or improvements, submit a pull request.
 
