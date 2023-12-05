@@ -2,7 +2,7 @@ import java.io.File
 import kotlin.time.measureTimedValue
 
 object MyArray {
-    fun runPart(dayRun: (List<StringBuilder>) -> Unit, partNum: Int, dayNum: Int = -1) {
+    fun runPart(dayRun: (List<StringBuilder>) -> Unit, partNum: Int, dayNum: Int = 0) {
         println("//------------[Day $dayNum Part $partNum]------------\\\\")
         val readFile = readFile(dayNum)
         val (_, time1) = measureTimedValue {
@@ -17,7 +17,7 @@ object MyArray {
      * @param dayNum the day number of the file (e.g., 1 for day1)
      * @return a list of strings containing the content of the file
      */
-    private fun readFile(dayNum: Int = -1): List<StringBuilder> {
+    private fun readFile(dayNum: Int = 0): List<StringBuilder> {
         // Uses this to get the base dir eg "~/.../WordPuzzleSolver"
         var currentDirectory = System.getProperty("user.dir")
 
@@ -26,7 +26,7 @@ object MyArray {
         // day1.txt
         val filePath =
             "$currentDirectory/main/resources/${
-                if (dayNum == -1)
+                if (dayNum == 0)
                     "Example"
                 else
                     "day${dayNum}"
