@@ -18,14 +18,11 @@ object MyArray {
      * @return a list of strings containing the content of the file
      */
     private fun readFile(dayNum: Int = 0): List<StringBuilder> {
-        // Uses this to get the base dir eg "~/.../WordPuzzleSolver"
-        var currentDirectory = System.getProperty("user.dir")
 
-        if (!currentDirectory.endsWith("src")) currentDirectory += "/src"
 
         // day1.txt
         val filePath =
-            "$currentDirectory/main/resources/${
+            "${getFilePath()}/main/resources/${
                 if (dayNum == 0)
                     "Example"
                 else
@@ -35,10 +32,18 @@ object MyArray {
         return mutableListOf<StringBuilder>()
             .also {
                 File(filePath)
-                    .forEachLine {
-                        line -> it.add(StringBuilder(line))
+                    .forEachLine { line ->
+                        it.add(StringBuilder(line))
                     }
             }
+    }
+
+    private fun getFilePath(): String {
+        // Uses this to get the base dir eg "~/.../WordPuzzleSolver"
+        var currentDirectory = System.getProperty("user.dir")
+        if (!currentDirectory.endsWith("src"))
+            currentDirectory += "/src"
+        return currentDirectory
     }
 
     /**
@@ -53,5 +58,36 @@ object MyArray {
             }
             println()
         }
+    }
+
+    /**
+     * Creates a new Kotlin file for a specific day.
+     *
+     * @param dayNum The number of the day for which the file is created.
+     *               This should be a positive integer value.
+     */
+    fun newDay(dayNum: Int) {
+        File("${getFilePath()}\\main\\kotlin\\Day$dayNum.kt")
+            .also {
+                if (it.exists()) {
+                    println("Cannot create file as it already exits in ${it.absolutePath}")
+                    return
+                }
+            }
+            .bufferedWriter()
+            .use {
+                it.write(
+                    """
+                    fun main() {
+                        MyArray.runPart(::part1, 1, $dayNum)
+                        MyArray.runPart(::part2, 2, $dayNum)
+                    }
+                    
+                    private fun part1(readFile: List<StringBuilder>) {}
+                    
+                    private fun part2(readFile: List<StringBuilder>) {}
+                    """.trimIndent()
+                )
+            }
     }
 }
