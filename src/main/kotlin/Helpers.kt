@@ -1,12 +1,15 @@
 import java.io.File
+import java.nio.file.FileAlreadyExistsException
+import java.time.Year
 import kotlin.time.measureTimedValue
 
 object MyArray {
-    fun runPart(dayRun: (List<StringBuilder>) -> Unit, partNum: Int, dayNum: Int = 0) {
+
+    fun runPart(dayFuncToRun: (List<StringBuilder>) -> Unit, partNum: Int, dayNum: Int = 0) {
         println("//------------[Day $dayNum Part $partNum]------------\\\\")
         val readFile = readFile(dayNum)
         val (_, time1) = measureTimedValue {
-            dayRun(readFile)
+            dayFuncToRun(readFile)
         }
         println("Time: ${time1.inWholeMilliseconds}ms\n")
     }
@@ -69,18 +72,24 @@ object MyArray {
     fun newDay(dayNum: Int) {
         File("${getFilePath()}\\main\\kotlin\\Day$dayNum.kt")
             .also {
-                if (it.exists()) {
-                    println("Cannot create file as it already exits in ${it.absolutePath}")
-                    return
-                }
+                if (it.exists())
+                    throw FileAlreadyExistsException(
+                        "Cannot create file as it already exits in ${it.absolutePath}"
+                    )
             }
             .bufferedWriter()
             .use {
                 it.write(
                     """
+                    import MyArray.runPart
+                    
+                    /**
+                     * https://adventofcode.com/${Year.now()}/day/$dayNum
+                     */
                     fun main() {
-                        MyArray.runPart(::part1, 1, $dayNum)
-                        MyArray.runPart(::part2, 2, $dayNum)
+                        // (partFunc, partNum, dayNum)
+                        runPart(::part1, 1, $dayNum)
+                        runPart(::part2, 2, $dayNum)
                     }
                     
                     private fun part1(readFile: List<StringBuilder>) {}

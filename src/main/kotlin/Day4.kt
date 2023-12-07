@@ -1,6 +1,11 @@
+import MyArray.runPart
+
+/**
+ * https://adventofcode.com/2023/day/4
+ */
 fun main() {
-    MyArray.runPart(::part1, 1, 4)
-    MyArray.runPart(::part2, 1, 4)
+    runPart(::part1, 1, 4)
+    runPart(::part2, 2, 4)
 }
 
 private fun part1(cardsList: List<StringBuilder>) {

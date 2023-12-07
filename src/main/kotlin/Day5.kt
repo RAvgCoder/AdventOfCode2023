@@ -1,3 +1,42 @@
+import MyArray.runPart
+
+/**
+ * https://adventofcode.com/2023/day/5
+ */
+fun main() {
+    runPart(::part1, 1, 5)
+    runPart(::part2, 2, 5)
+}
+
+private fun part1(lookUpTable: List<StringBuilder>) {
+    val farmMapList = setup(lookUpTable)
+    val seeds = lookUpTable[0].split("\\s+".toRegex())
+        .drop(1)
+        .map { it.toLong() }
+        .minOfOrNull { seedState ->
+            findMinMapState(seedState, farmMapList)
+        }
+    println("The lowest location number that corresponds to any of the initial seed number is $seeds")
+}
+
+private fun part2(lookUpTable: List<StringBuilder>) {
+    val farmMapList = setup(lookUpTable)
+
+    val seeds =
+        lookUpTable[0].split("\\s+".toRegex())
+            .drop(1)
+            .asSequence()
+            .map { it.toLong() }
+            // get the seed ranges 2 3 4 5 -> [[2,3], [4,5]]
+            .windowed(2, 2)
+            .map { LongRange(it[0], it[1] + (it[0] - 1)) }
+            .minOf { seedRange ->
+                seedRange.minOf { findMinMapState(it, farmMapList) }
+            }
+
+    println("The lowest location number that corresponds to any of the initial seed number is $seeds")
+}
+
 data class FarmMap(
     // seed-to-soil map:
     val name: String,
@@ -52,40 +91,5 @@ private fun findMinMapState(seedState: Long, farmMapList: List<FarmMap>): Long {
         }
     }
     return state
-}
-
-fun main() {
-    MyArray.newDay(6)
-    MyArray.runPart(::part1, 1, 5)
-    MyArray.runPart(::part2, 2, 5)
-}
-
-private fun part1(lookUpTable: List<StringBuilder>) {
-    val farmMapList = setup(lookUpTable)
-    val seeds = lookUpTable[0].split("\\s+".toRegex())
-        .drop(1)
-        .map { it.toLong() }
-        .minOfOrNull { seedState ->
-            findMinMapState(seedState, farmMapList)
-        }
-    println("The lowest location number that corresponds to any of the initial seed number is $seeds")
-}
-
-private fun part2(lookUpTable: List<StringBuilder>) {
-    val farmMapList = setup(lookUpTable)
-
-    val seeds =
-        lookUpTable[0].split("\\s+".toRegex())
-            .drop(1)
-            .asSequence()
-            .map { it.toLong() }
-            // get the seed ranges 2 3 4 5 -> [[2,3], [4,5]]
-            .windowed(2, 2)
-            .map { LongRange(it[0], it[1] + (it[0] - 1)) }
-            .minOf { seedRange ->
-                seedRange.minOf { findMinMapState(it, farmMapList) }
-            }
-
-    println("The lowest location number that corresponds to any of the initial seed number is $seeds")
 }
 

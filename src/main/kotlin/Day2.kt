@@ -1,9 +1,11 @@
+import MyArray.runPart
+
 /**
  * https://adventofcode.com/2023/day/2
  */
 fun main() {
-    MyArray.runPart(::part1,1,2)
-    MyArray.runPart(::part2,2,2)
+    runPart(::part1,1,2)
+    runPart(::part2,2,2)
 }
 
 private fun part1(lines: List<StringBuilder>) {
