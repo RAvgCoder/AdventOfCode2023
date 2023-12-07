@@ -34,14 +34,11 @@ private fun findScores(cards: List<Cards>): Int {
     return cards.groupBy {
         it.pokerHandType
     }.toList().sortedBy { (hand, _) ->
-        hand.toString()
+        hand.ordinal
     }.reversed().sumOf { (_, cards) ->
         cards.sortedBy {
             it.cardData
-        }.reversed().apply {
-            this.onEach(::println)
-            println()
-        }.sumOf { card ->
+        }.reversed().sumOf { card ->
             score++ * card.bid
         }
     }
@@ -77,24 +74,24 @@ private data class Cards(var cardData: StringBuilder, val jIsWeak: Boolean) {
                 }
 
             return when ((remainingCards.firstOrNull()?.second ?: 0) + jCount) {
-                5 -> PokerHandType.A_FIVE_OF_A_KIND
-                4 -> PokerHandType.B_FOUR_OF_A_KIND
-                3 -> if (remainingCards[1].second == 2) PokerHandType.C_FULL_HOUSE
-                else PokerHandType.D_THREE_OF_A_KIND
+                5 -> PokerHandType.FIVE_OF_A_KIND
+                4 -> PokerHandType.FOUR_OF_A_KIND
+                3 -> if (remainingCards[1].second == 2) PokerHandType.FULL_HOUSE
+                else PokerHandType.THREE_OF_A_KIND
 
-                2 -> if (remainingCards[1].second == 1) PokerHandType.F_ONE_PAIR
-                else PokerHandType.E_TWO_PAIR
+                2 -> if (remainingCards[1].second == 1) PokerHandType.ONE_PAIR
+                else PokerHandType.TWO_PAIR
 
-                else -> PokerHandType.G_HIGH_CARD
+                else -> PokerHandType.HIGH_CARD
             }
         } else when {
-            cardRaw.values.any { it == 5 } -> PokerHandType.A_FIVE_OF_A_KIND
-            cardRaw.values.any { it == 4 } -> PokerHandType.B_FOUR_OF_A_KIND
-            cardRaw.values.any { it == 3 } && cardRaw.values.any { it == 2 } -> PokerHandType.C_FULL_HOUSE
-            cardRaw.values.any { it == 3 } -> PokerHandType.D_THREE_OF_A_KIND
-            cardRaw.values.count { it == 2 } == 2 -> PokerHandType.E_TWO_PAIR
-            cardRaw.values.count { it == 2 } == 1 -> PokerHandType.F_ONE_PAIR
-            else -> PokerHandType.G_HIGH_CARD
+            cardRaw.values.any { it == 5 } -> PokerHandType.FIVE_OF_A_KIND
+            cardRaw.values.any { it == 4 } -> PokerHandType.FOUR_OF_A_KIND
+            cardRaw.values.any { it == 3 } && cardRaw.values.any { it == 2 } -> PokerHandType.FULL_HOUSE
+            cardRaw.values.any { it == 3 } -> PokerHandType.THREE_OF_A_KIND
+            cardRaw.values.count { it == 2 } == 2 -> PokerHandType.TWO_PAIR
+            cardRaw.values.count { it == 2 } == 1 -> PokerHandType.ONE_PAIR
+            else -> PokerHandType.HIGH_CARD
         }
     }
 
@@ -104,7 +101,7 @@ private data class Cards(var cardData: StringBuilder, val jIsWeak: Boolean) {
 }
 
 enum class PokerHandType {
-    A_FIVE_OF_A_KIND, B_FOUR_OF_A_KIND, C_FULL_HOUSE, D_THREE_OF_A_KIND, E_TWO_PAIR, F_ONE_PAIR, G_HIGH_CARD;
+    FIVE_OF_A_KIND, FOUR_OF_A_KIND, FULL_HOUSE, THREE_OF_A_KIND, TWO_PAIR, ONE_PAIR, HIGH_CARD;
 }
 
 private val rankMap1 = arrayOf(
