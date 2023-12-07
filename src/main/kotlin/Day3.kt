@@ -6,6 +6,7 @@ import MyArray.runPart
 fun main() {
     runPart(::part1, 1, 3)
     runPart(::part2, 2, 3)
+    
 }
 
 private fun part1(readFile: List<StringBuilder>) {
