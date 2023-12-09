@@ -29,20 +29,12 @@ private fun part2(readFile: List<StringBuilder>) {
     println("The new total winnings is $winnings")
 }
 
-private fun findScores(cards: List<Cards>): Int {
-    var score = 1
-    return cards.groupBy {
-        it.pokerHandType
-    }.toList().sortedBy { (hand, _) ->
-        hand.ordinal
-    }.reversed().sumOf { (_, cards) ->
-        cards.sortedBy {
-            it.cardData
-        }.reversed().sumOf { card ->
-            score++ * card.bid
-        }
-    }
-}
+private fun findScores(cards: List<Cards>): Int = cards
+        .sortedWith(compareBy({ it.pokerHandType }, { it.cardData }))
+        .reversed()
+        .mapIndexed { index: Int, card: Cards ->
+            (index + 1) * card.bid
+        }.sum()
 
 private data class Cards(var cardData: StringBuilder, val jIsWeak: Boolean) {
     val pokerHandType: PokerHandType
@@ -67,6 +59,7 @@ private data class Cards(var cardData: StringBuilder, val jIsWeak: Boolean) {
             var remainingCards: List<Pair<Char, Int>>
             val jCount = cardRaw.toList()
                 .sortedByDescending { it.second }
+                // M == J {After mapping}
                 .partition { it.first == 'M' }
                 .let {
                     remainingCards = it.second
@@ -95,9 +88,7 @@ private data class Cards(var cardData: StringBuilder, val jIsWeak: Boolean) {
         }
     }
 
-    override fun toString(): String {
-        return "Cards(data=$cardData, bid=$bid, PokerHandType=$pokerHandType)"
-    }
+    override fun toString(): String = "Cards(Data=$cardData, Bid=$bid, PokerHandType=$pokerHandType)"
 }
 
 enum class PokerHandType {
