@@ -4,6 +4,12 @@ import java.time.Year
 import kotlin.time.measureTimedValue
 
 object MyArray {
+    fun validate(urValLong: Long, expected: Long) =
+        check(urValLong == expected) {"Your result=$urValLong but expected $expected"}
+
+    fun validate(urValInt: Int, expected: Int) =
+        check(urValInt == expected) {"Your result is $urValInt but expected $expected"}
+
 
     fun runPart(dayFuncToRun: (List<StringBuilder>) -> Unit, partNum: Int, dayNum: Int = 0) {
         println("//------------[Day $dayNum Part $partNum]------------\\\\")
@@ -82,6 +88,7 @@ object MyArray {
                 it.write(
                     """
                     import MyArray.runPart
+                    import MyArray.validate
                     
                     /**
                      * https://adventofcode.com/${Year.now()}/day/$dayNum
@@ -92,11 +99,20 @@ object MyArray {
                         runPart(::part2, 2, $dayNum)
                     }
                     
-                    private fun part1(readFile: List<StringBuilder>) {}
+                    private fun part1(readFile: List<StringBuilder>) {
+                        validate(0, 0)
+                    }
                     
-                    private fun part2(readFile: List<StringBuilder>) {}
+                    private fun part2(readFile: List<StringBuilder>) {
+                        validate(0, 0)
+                    }
                     """.trimIndent()
                 )
             }
+    }
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        newDay(9)
     }
 }
