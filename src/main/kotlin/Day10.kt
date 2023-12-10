@@ -26,7 +26,7 @@ private fun part1(readFile: List<StringBuilder>) {
     var currentPos = startingPoint
     var prevPos = startingPoint
 
-    var next = canMoveTo(currentPos, prevPos,map)!!
+    var next =  canMoveTo(currentPos, prevPos,map)!!
     currentPos = next + currentPos
     while (!startingPoint.contentEquals(currentPos)) {
 //        println("Curr: ${currentPos.contentToString()} Next: $next")
