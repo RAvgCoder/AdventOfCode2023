@@ -75,7 +75,7 @@ object MyArray {
      * @param dayNum The number of the day for which the file is created.
      *               This should be a positive integer value.
      */
-    fun newDay(dayNum: Int) {
+    private fun newDay(dayNum: Int) {
         File("${getFilePath()}\\main\\kotlin\\Day$dayNum.kt")
             .also {
                 if (it.exists())
@@ -113,6 +113,6 @@ object MyArray {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        newDay(9)
+        newDay(10)
     }
 }
