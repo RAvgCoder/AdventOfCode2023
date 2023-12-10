@@ -1,4 +1,6 @@
-import MyArray.runPart
+import HelperUtils.Direction
+import HelperUtils.Utils.runPart
+
 
 /**
  * https://adventofcode.com/2023/day/3
@@ -6,7 +8,6 @@ import MyArray.runPart
 fun main() {
     runPart(::part1, 1, 3)
     runPart(::part2, 2, 3)
-    
 }
 
 private fun part1(readFile: List<StringBuilder>) {
@@ -103,24 +104,14 @@ private fun part2(input: List<StringBuilder>) {
     println("Gear ratios produced $sum")
 }
 
-val directions = arrayOf(
-    intArrayOf(-1, -1),
-    intArrayOf(-1, 0),
-    intArrayOf(-1, 1),
-    intArrayOf(0, 1),
-    intArrayOf(1, 1),
-    intArrayOf(1, 0),
-    intArrayOf(1, -1),
-    intArrayOf(0, -1),
-)
-
+private val directions = Direction.entries
 fun findGears(yCoord: Int, xCoord: Int, readFile: List<StringBuilder>): Int {
     val gears: MutableList<Triple<Int, IntRange, Int>> = mutableListOf()
 
     for (dir in directions) {
         // Calculate the new coordinates based on the direction
-        val yOffset = yCoord + dir[0]
-        val xOffset = xCoord + dir[1]
+        val yOffset = yCoord + dir.x
+        val xOffset = xCoord + dir.y
 
         if (yOffset !in readFile.indices || xOffset !in readFile[0].indices) continue
 

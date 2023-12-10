@@ -1,4 +1,4 @@
-import MyArray.runPart
+import HelperUtils.Utils.runPart
 
 /**
  * https://adventofcode.com/2023/day/7

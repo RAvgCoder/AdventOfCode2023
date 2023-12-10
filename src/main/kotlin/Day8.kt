@@ -1,5 +1,5 @@
-import MyArray.runPart
-import MyArray.validate
+import HelperUtils.Utils.runPart
+import HelperUtils.Utils.validate
 
 /**
  * https://adventofcode.com/2023/day/8

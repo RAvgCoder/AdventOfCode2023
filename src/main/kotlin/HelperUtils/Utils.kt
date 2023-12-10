@@ -1,9 +1,11 @@
+package HelperUtils
+
 import java.io.File
 import java.nio.file.FileAlreadyExistsException
 import java.time.Year
 import kotlin.time.measureTimedValue
 
-object MyArray {
+object Utils {
     fun validate(urValLong: Long, expected: Long) =
         check(urValLong == expected) {"Your result=$urValLong but expected $expected"}
 
@@ -87,8 +89,8 @@ object MyArray {
             .use {
                 it.write(
                     """
-                    import MyArray.runPart
-                    import MyArray.validate
+                    import HelperUtils.Utils.runPart
+                    import HelperUtils.Utils.validate
                     
                     /**
                      * https://adventofcode.com/${Year.now()}/day/$dayNum
