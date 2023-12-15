@@ -7,7 +7,7 @@ import HelperUtils.Utils.validate
  */
 fun main() {
     // (partFunc, partNum, dayNum)
-    runPart(::part1, 1,10)
+    runPart(::part1, 1, 10)
     runPart(::part2, 2, 10)
 }
 
@@ -16,9 +16,7 @@ private val direction = Direction.getDirNSEW()
 
 //private val visited: HashSet<String> = HashSet()
 
-private fun part1(readFile: List<StringBuilder>) {
-    val map: Array<CharArray> = setUP(readFile)
-
+private fun part1(map: List<CharArray>) {
     val startingPoint = findS(map)
     var steps = 1
 
@@ -26,11 +24,10 @@ private fun part1(readFile: List<StringBuilder>) {
     var currentPos = startingPoint
     var prevPos = startingPoint
 
-    var next =  canMoveTo(currentPos, prevPos,map)!!
+    var next = canMoveTo(currentPos, prevPos, map)!!
     currentPos = next + currentPos
     while (!startingPoint.contentEquals(currentPos)) {
-//        println("Curr: ${currentPos.contentToString()} Next: $next")
-        next = canMoveTo(currentPos, prevPos,map)!!
+        next = canMoveTo(currentPos, prevPos, map)!!
         prevPos = currentPos
         currentPos = next + currentPos
         steps++
@@ -40,15 +37,72 @@ private fun part1(readFile: List<StringBuilder>) {
 
     validate(steps, 6754)
     println(
-        "The num of steps along the loop it takes to get from the starting position to the point farthest from the starting position is $steps"
+        "Num of steps along it takes to get from the starting to the farthest point is $steps"
     )
 }
 
-private fun part2(readFile: List<StringBuilder>) {
-    validate(0, 0)
+fun minMax(currentPos: IntArray) {
+    if (currentPos[0] > maxX) maxX = currentPos[0]
+    if (currentPos[0] < minX) minX = currentPos[0]
+    if (currentPos[1] > maxY) maxY = currentPos[1]
+    if (currentPos[1] < minY) minY = currentPos[1]
 }
 
-fun canMoveTo(currentPos: IntArray, prevPos: IntArray, map: Array<CharArray>): Direction? {
+private var minX = Int.MAX_VALUE
+private var minY = Int.MAX_VALUE
+private var maxX = Int.MIN_VALUE
+private var maxY = Int.MIN_VALUE
+
+private fun part2(map: List<CharArray>) {
+
+    val newM = Array(map.size) { CharArray(map[0].size) { '_' } }
+
+    val startingPoint = findS(map)
+    var steps = 1
+
+
+    var currentPos = startingPoint
+    var prevPos = startingPoint
+    newM[currentPos[0]][currentPos[1]] = 'X'
+
+    var next = canMoveTo(currentPos, prevPos, map)!!
+    currentPos = next + currentPos
+    while (!startingPoint.contentEquals(currentPos)) {
+//        println("Curr: ${currentPos.contentToString()} Next: $next")
+        newM[currentPos[0]][currentPos[1]] = 'X'
+        minMax(currentPos)
+        next = canMoveTo(currentPos, prevPos, map)!!
+        prevPos = currentPos
+        currentPos = next + currentPos
+        steps++
+    }
+
+    map.forEach { println(it.contentToString()) }
+    println()
+    newM.forEach { println(it.contentToString()) }
+
+    println(
+        """
+        
+        Bounds
+        ---------
+        Min: [$minX, $minY]
+        Max: [$maxX, $maxY]
+        
+    """.trimIndent()
+    )
+
+    steps /= 2
+
+    validate(0, 0)
+    println(
+        "Num of steps along it takes to get from the starting to the farthest point is $steps"
+    )
+}
+
+fun canMoveTo(currentPos: IntArray, prevPos: IntArray, map: List<CharArray>): Direction? {
+    if (currentPos[0] !in map.indices || currentPos[1] !in map[0].indices)
+        return null
 
     val south = Direction.SOUTH + currentPos
     val north = Direction.NORTH + currentPos
@@ -95,7 +149,7 @@ fun canMoveTo(currentPos: IntArray, prevPos: IntArray, map: Array<CharArray>): D
 
         'S' -> {
             for (dir in direction) {
-                val next = canMoveTo(dir + currentPos, prevPos,map)
+                val next = canMoveTo(dir + currentPos, prevPos, map)
                 next?.let { return dir }
             }
             throw IllegalStateException("Could not find any direction to move to from S: ${currentPos.contentToString()}")
@@ -105,19 +159,13 @@ fun canMoveTo(currentPos: IntArray, prevPos: IntArray, map: Array<CharArray>): D
     }
 }
 
-fun findS(map: Array<CharArray>): IntArray {
+fun findS(map: List<CharArray>): IntArray {
     for (i in map.indices) {
-        for (j in map.indices) {
+        for (j in map[0].indices) {
             if (map[i][j] == 'S') {
                 return intArrayOf(i, j)
             }
         }
     }
     throw IllegalStateException("Could not find a starting point `S` in the map")
-}
-
-fun setUP(map: List<StringBuilder>): Array<CharArray> {
-    return map.map {
-        it.toString().toCharArray()
-    }.toTypedArray()
 }

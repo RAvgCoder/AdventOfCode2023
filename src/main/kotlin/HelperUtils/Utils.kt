@@ -7,20 +7,33 @@ import kotlin.time.measureTimedValue
 
 object Utils {
     fun validate(urValLong: Long, expected: Long) =
-        check(urValLong == expected) {"Your result=$urValLong but expected $expected"}
+        check(urValLong == expected) { "Your result=$urValLong but expected $expected" }
 
     fun validate(urValInt: Int, expected: Int) =
-        check(urValInt == expected) {"Your result is $urValInt but expected $expected"}
+        check(urValInt == expected) { "Your result is $urValInt but expected $expected" }
 
 
-    fun runPart(dayFuncToRun: (List<StringBuilder>) -> Unit, partNum: Int, dayNum: Int = 0) {
+    inline fun <reified T> runPart(
+        dayFuncToRun: (List<T>) -> Unit,
+        partNum: Int,
+        dayNum: Int = 0
+    ) {
         println("//------------[Day $dayNum Part $partNum]------------\\\\")
-        val readFile = readFile(dayNum)
-        val (_, time1) = measureTimedValue {
-            dayFuncToRun(readFile)
+        val readFile = when (T::class) {
+            StringBuilder::class -> readFile(dayNum)
+            CharArray::class -> readFile(dayNum).map { it.toString().toCharArray() }
+            IntArray::class -> readFile(dayNum).map { line ->
+                line.split("\\s+").map { it.toInt() }.toIntArray()
+            }
+
+            else -> throw IllegalArgumentException("Unsupported type: ${T::class}")
         }
-        println("Time: ${time1.inWholeMilliseconds}ms\n")
+        val (_, elapsedTime) = measureTimedValue {
+            dayFuncToRun(readFile as List<T>)
+        }
+        println("Time: ${elapsedTime.inWholeMilliseconds}ms\n")
     }
+
 
     /**
      * Reads a file and returns its content as a list of strings.
@@ -28,8 +41,7 @@ object Utils {
      * @param dayNum the day number of the file (e.g., 1 for day1)
      * @return a list of strings containing the content of the file
      */
-    private fun readFile(dayNum: Int = 0): List<StringBuilder> {
-
+    fun readFile(dayNum: Int = 0): List<StringBuilder> {
 
         // day1.txt
         val filePath =
@@ -62,14 +74,29 @@ object Utils {
      *
      * @param arr the 2D array to be printed
      */
-    fun print2D(arr: Array<Array<Any>>) {
-        for (i in arr.indices) {
-            for (j in arr[i].indices) {
-                print(arr[i][j].toString() + "\t")
+    fun print2D(arr: Array<Array<Any>>) =
+        StringBuilder().apply {
+            arr.forEach { colm ->
+                colm.forEach {
+                    append("$it\t")
+                }
+                append("\n")
             }
-            println()
+            println(this)
         }
-    }
+
+
+    fun print2D(arr: List<CharArray>) =
+        StringBuilder().apply {
+            arr.forEach { line ->
+                line.forEach {
+                    append("$it\t")
+                }
+                append("\n")
+            }
+            println(this)
+        }
+
 
     /**
      * Creates a new Kotlin file for a specific day.
@@ -78,7 +105,8 @@ object Utils {
      *               This should be a positive integer value.
      */
     private fun newDay(dayNum: Int) {
-        File("${getFilePath()}\\main\\kotlin\\Day$dayNum.kt")
+        val filPath = "${getFilePath()}\\main\\kotlin\\Day$dayNum.kt";
+        File(filPath)
             .also {
                 if (it.exists())
                     throw FileAlreadyExistsException(
@@ -111,10 +139,11 @@ object Utils {
                     """.trimIndent()
                 )
             }
+        println("File successfully created at location: $filPath")
     }
 
     @JvmStatic
     fun main(args: Array<String>) {
-        newDay(10)
+        newDay(15)
     }
 }
