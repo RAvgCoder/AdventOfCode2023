@@ -32,7 +32,7 @@ private fun part1(map: List<CharArray>) {
 
 private fun getNumOfEnergizedPaths(map: List<CharArray>, ray: MutableList<Ray>): Int {
     var rays = ray
-    val allPaths = ray.first().path
+    val pathsForOriginalRayFired = ray.first().path
 
     do {
         rays = rays.let { list ->
@@ -43,10 +43,9 @@ private fun getNumOfEnergizedPaths(map: List<CharArray>, ray: MutableList<Ray>):
         }
     } while (rays.isNotEmpty())
 
-    val energizedPaths = allPaths.map {
+    return pathsForOriginalRayFired.map {
         it.split("\\s+".toRegex())[1]
-    }.toSet().size
-    return energizedPaths
+    }.distinct().size
 }
 
 private fun part2(map: List<CharArray>) {
@@ -67,15 +66,14 @@ private fun part2(map: List<CharArray>) {
 
     val energizedPaths = rays.maxOf { ray -> getNumOfEnergizedPaths(map, mutableListOf(ray)) }
 
-    println("The number of tiles ended up being energized is $energizedPaths")
+    println("The number of tiles ended up being energized the most is $energizedPaths")
 
-
-    validate(0, 0)
+    validate(energizedPaths, 8225)
 }
 
 private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {
     val coordinate = ray.coordinate.copy()
-    val direction = ray.dir.copy()
+    val direction = ray.direction.copy()
     var extraRay: Ray? = null
 
     if (!coordinate.isValid(endX = map[0].size, endY = map.size)) {
@@ -85,13 +83,12 @@ private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {
 
     when (map[coordinate.x][coordinate.y]) {
         '.' -> ray.move()
-        '>', '^', 'v', '<' -> ray.move()
         '-' -> {
             if (direction == EAST || direction == WEST) ray.move()
             else {
                 extraRay = ray.clone()
-                extraRay.apply { dir = EAST }.move()
-                ray.apply { dir = WEST }.move()
+                extraRay.apply { this.direction = EAST }.move()
+                ray.apply { this.direction = WEST }.move()
             }
         }
 
@@ -99,13 +96,13 @@ private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {
             if (direction == NORTH || direction == SOUTH) ray.move()
             else {
                 extraRay = ray.clone()
-                extraRay.apply { dir = NORTH }.move()
-                ray.apply { dir = SOUTH }.move()
+                extraRay.apply { this.direction = NORTH }.move()
+                ray.apply { this.direction = SOUTH }.move()
             }
         }
 
         '\\' -> {
-            ray.dir = when (direction) {
+            ray.direction = when (direction) {
                 WEST -> NORTH
                 EAST -> SOUTH
                 NORTH -> WEST
@@ -116,7 +113,7 @@ private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {
         }
 
         '/' -> {
-            ray.dir = when (direction) {
+            ray.direction = when (direction) {
                 WEST -> SOUTH
                 EAST -> NORTH
                 NORTH -> EAST
@@ -129,29 +126,28 @@ private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {
         else -> throw IllegalStateException("Illegal state ${map[coordinate.x][coordinate.y]}")
     }
 
-//    placeSpot(direction, coordinate, map)
-
     return extraRay
 }
 
 private data class Ray(
-    var dir: Direction,
+    var direction: Direction,
     var isAlive: Boolean,
     val coordinate: Coordinate2D,
     val path: MutableSet<String>
 ) {
     fun move() {
-        val hash = "$coordinate Direction=$dir"
-        if (path.contains(hash)) isAlive = false
+        val hash = "$coordinate Direction=$direction"
+        if (path.contains(hash))
+            isAlive = false
         else {
             path.add(hash)
-            coordinate.move(dir)
+            coordinate.move(direction)
         }
     }
 
     fun clone(): Ray {
         return Ray(
-            dir.copy(),
+            direction.copy(),
             true,
             coordinate.copy(),
             path
