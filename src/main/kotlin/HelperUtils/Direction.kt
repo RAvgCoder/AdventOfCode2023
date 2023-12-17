@@ -13,6 +13,7 @@ enum class Direction(val x: Int, val y: Int) {
     companion object {
         fun getDirNSEW() =
             Direction.entries.filterIndexed { i, _ -> i % 2 == 0 }
+
         fun getFullCoord() =
             Direction.entries
 
@@ -25,7 +26,12 @@ enum class Direction(val x: Int, val y: Int) {
         }
     }
 
+
     infix operator fun plus(currPos: IntArray): IntArray {
         return intArrayOf(this.x + currPos[0], this.y + currPos[1])
+    }
+
+    fun copy(): Direction {
+        return getFullCoord()[this.ordinal]
     }
 }

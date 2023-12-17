@@ -144,6 +144,6 @@ object Utils {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        newDay(15)
+        newDay(16)
     }
 }

@@ -37,7 +37,7 @@ private fun part2(lookUpTable: List<StringBuilder>) {
     println("The lowest location number that corresponds to any of the initial seed number is $seeds")
 }
 
-data class FarmMap(
+private data class FarmMap(
     // seed-to-soil map:
     val name: String,
     // Pair <destination, source>
