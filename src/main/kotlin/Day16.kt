@@ -25,9 +25,7 @@ private fun part1(map: List<CharArray>) {
 
     val energizedPaths = getNumOfEnergizedPaths(map, rays)
 
-    println("The number of tiles ended up being energized is $energizedPaths")
-
-    validate(energizedPaths, 8034)
+    validate("The number of tiles ended up being energized is", energizedPaths, 8034)
 }
 
 private fun getNumOfEnergizedPaths(map: List<CharArray>, ray: MutableList<Ray>): Int {
@@ -68,7 +66,7 @@ private fun part2(map: List<CharArray>) {
 
     println("The number of tiles ended up being energized the most is $energizedPaths")
 
-    validate(energizedPaths, 8225)
+    validate("The number of tiles ended up being energized is", energizedPaths, 8225)
 }
 
 private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {

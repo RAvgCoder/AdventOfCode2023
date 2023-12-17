@@ -1,4 +1,5 @@
 import HelperUtils.Utils.runPart
+import HelperUtils.Utils.validate
 
 /**
  * https://adventofcode.com/2023/day/5
@@ -10,19 +11,20 @@ fun main() {
 
 private fun part1(lookUpTable: List<StringBuilder>) {
     val farmMapList = setup(lookUpTable)
-    val seeds = lookUpTable[0].split("\\s+".toRegex())
+    val seedNum = lookUpTable[0].split("\\s+".toRegex())
         .drop(1)
         .map { it.toLong() }
         .minOfOrNull { seedState ->
             findMinMapState(seedState, farmMapList)
-        }
-    println("The lowest location number that corresponds to any of the initial seed number is $seeds")
+        }!!
+
+    validate("The lowest location number that corresponds to any of the initial seed number is", seedNum, 282277027)
 }
 
 private fun part2(lookUpTable: List<StringBuilder>) {
     val farmMapList = setup(lookUpTable)
 
-    val seeds =
+    val seedNum =
         lookUpTable[0].split("\\s+".toRegex())
             .drop(1)
             .asSequence()
@@ -34,7 +36,7 @@ private fun part2(lookUpTable: List<StringBuilder>) {
                 seedRange.minOf { findMinMapState(it, farmMapList) }
             }
 
-    println("The lowest location number that corresponds to any of the initial seed number is $seeds")
+    validate("The lowest location number that corresponds to any of the initial seed number is", seedNum, 11554135)
 }
 
 private data class FarmMap(

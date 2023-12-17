@@ -35,10 +35,7 @@ private fun part1(map: List<CharArray>) {
 
     steps /= 2
 
-    validate(steps, 6754)
-    println(
-        "Num of steps along it takes to get from the starting to the farthest point is $steps"
-    )
+    validate("Num of steps along it takes to get from the starting to the farthest point is", steps, 6754)
 }
 
 fun minMax(currentPos: IntArray) {
@@ -94,10 +91,7 @@ private fun part2(map: List<CharArray>) {
 
     steps /= 2
 
-    validate(0, 0)
-    println(
-        "Num of steps along it takes to get from the starting to the farthest point is $steps"
-    )
+    validate("Num of steps along it takes to get from the starting to the farthest point is", steps, 0)
 }
 
 fun canMoveTo(currentPos: IntArray, prevPos: IntArray, map: List<CharArray>): Direction? {

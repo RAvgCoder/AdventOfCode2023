@@ -17,8 +17,7 @@ private fun part1(oldPlatform: List<CharArray>) {
     rollNorth(platform)
     val supportLoad = calculateSupportLoad(platform)
 
-    validate(supportLoad, 108857)
-    println("The total load on the north support beams is $supportLoad")
+    validate("The total load on the north support beams is", supportLoad, 108857)
 }
 
 private fun part2(oldPlatform: List<CharArray>) {
@@ -30,8 +29,7 @@ private fun part2(oldPlatform: List<CharArray>) {
     }
 
     val supportLoad = calculateSupportLoad(platform)
-    println("The total load on the north support beams is $supportLoad")
-    validate(supportLoad, 64)
+    validate("The total load on the north support beams is", supportLoad, 64)
 }
 
 private fun runCycle(platform: MutableList<CharArray>) {

@@ -21,8 +21,7 @@ private fun part1(readFile: List<StringBuilder>) {
         dirIdx = (dirIdx + 1) % directions.length
     }
 
-    check(steps == 19637)
-    println("Steps are required to reach is $steps")
+    validate("Steps are required to reach is", steps, 19637)
 }
 
 const val DEAD = "ಠಿ_ಠ"
@@ -32,13 +31,12 @@ private fun part2(readFile: List<StringBuilder>) {
     val startingPoints =
         nodes.filter { it.key.endsWith("A") }.map { Triple(it.key, 0, 0) }.toList().toMutableList()
 
-    var  steps = 0
+    var steps = 0
 
 
 
 
-    validate(steps, 6)
-    println("Steps are required to reach is $steps")
+    validate("Steps are required to reach is", steps, 6)
 }
 
 

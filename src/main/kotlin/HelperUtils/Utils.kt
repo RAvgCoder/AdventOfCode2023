@@ -6,12 +6,15 @@ import java.time.Year
 import kotlin.time.measureTimedValue
 
 object Utils {
-    fun validate(urValLong: Long, expected: Long) =
-        check(urValLong == expected) { "Your result=$urValLong but expected $expected" }
+    fun validate(message: String, givenLong: Long, expected: Long) {
+        check(givenLong == expected) { "Your result=$givenLong but expected $expected" }
+        println("$message $givenLong")
+    }
 
-    fun validate(urValInt: Int, expected: Int) =
-        check(urValInt == expected) { "Your result is $urValInt but expected $expected" }
-
+    fun validate(message: String, givenInt: Int, expected: Int) {
+        check(givenInt == expected) { "Your result is $givenInt but expected $expected" }
+        println("$message $givenInt")
+    }
 
     inline fun <reified T> runPart(
         dayFuncToRun: (List<T>) -> Unit,
@@ -23,7 +26,11 @@ object Utils {
             StringBuilder::class -> readFile(dayNum)
             CharArray::class -> readFile(dayNum).map { it.toString().toCharArray() }
             IntArray::class -> readFile(dayNum).map { line ->
-                line.split("\\s+").map { it.toInt() }.toIntArray()
+                line.split("")
+                    .drop(1)
+                    .dropLast(1)
+                    .map { it.toInt() }
+                    .toIntArray()
             }
 
             else -> throw IllegalArgumentException("Unsupported type: ${T::class}")
@@ -130,11 +137,11 @@ object Utils {
                     }
                     
                     private fun part1(readFile: List<StringBuilder>) {
-                        validate(0, 0)
+                        validate("", 0, 0)
                     }
                     
                     private fun part2(readFile: List<StringBuilder>) {
-                        validate(0, 0)
+                        validate("", 0, 0)
                     }
                     """.trimIndent()
                 )
@@ -144,6 +151,6 @@ object Utils {
 
     @JvmStatic
     fun main(args: Array<String>) {
-        newDay(16)
+        newDay(17)
     }
 }

@@ -1,4 +1,5 @@
 import HelperUtils.Utils.runPart
+import HelperUtils.Utils.validate
 
 /**
  * https://adventofcode.com/2023/day/6
@@ -23,7 +24,7 @@ private fun part1(readFile: List<StringBuilder>) {
                 .let { firstWin -> (waitTime - firstWin) - firstWin + 1 }
         }.fold(1, Long::times)
 
-    println("Number of ways you can beat the record is $waysToBeatRecord")
+    validate("Number of ways you can beat the record is", waysToBeatRecord, 219849)
 }
 
 private fun part2(readFile: List<StringBuilder>) {
@@ -33,7 +34,8 @@ private fun part2(readFile: List<StringBuilder>) {
             line.split("\\s+".toRegex())
                 .drop(1)
                 .joinToString(separator = "")
-                .toLong() }
+                .toLong()
+        }
         .let { timeDistance ->
             val waitTime = timeDistance[0]
             val distance = timeDistance[1]
@@ -42,5 +44,5 @@ private fun part2(readFile: List<StringBuilder>) {
                 .let { firstWin -> (waitTime - firstWin) - firstWin + 1 }
         }
 
-    println("Number of ways you can beat the record is $waysToBeatRecord")
+    validate("Number of ways you can beat the record is", waysToBeatRecord, 29432455)
 }

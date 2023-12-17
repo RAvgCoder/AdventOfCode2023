@@ -1,4 +1,5 @@
 import HelperUtils.Utils.runPart
+import HelperUtils.Utils.validate
 
 /**
  * https://adventofcode.com/2023/day/1
@@ -9,15 +10,15 @@ fun main() {
 }
 
 private fun part1(lines: List<StringBuilder>) {
-    println("Sum of all of the calibration values is ${
-        lines.sumOf { str ->
-            "${str.find { it.isDigit() }}${str.findLast { it.isDigit() }}".toInt()
-        }
-    }")
+    val sumOfCalibration = lines.sumOf { str ->
+        "${str.find { it.isDigit() }}${str.findLast { it.isDigit() }}".toInt()
+    }
+    validate("Sum of all of the calibration values is", sumOfCalibration, 53334)
 }
 
 private fun part2(lines: List<StringBuilder>) {
-    println("Sum of all of the calibration values is ${lines.sumOf { count(it) }}")
+    val sumOfCalibration = lines.sumOf { count(it) }
+    validate("Sum of all of the calibration values is", sumOfCalibration, 53334)
 }
 
 private val numMap = listOf(

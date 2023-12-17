@@ -1,4 +1,5 @@
 import HelperUtils.Utils.runPart
+import HelperUtils.Utils.validate
 
 /**
  * https://adventofcode.com/2023/day/7
@@ -12,29 +13,25 @@ fun main() {
 private fun part1(readFile: List<StringBuilder>) {
     val winnings = readFile.map { cardData ->
         Cards(cardData, jIsWeak = false)
-    }.let(::findScores).apply {
-        check(this == 251121738) { "Expected: 251121738 Got: $this" }
-    }
+    }.let(::findScores)
 
-    println("The new total winnings is $winnings")
+    validate("The new total winnings is", winnings, 251121738)
 }
 
 private fun part2(readFile: List<StringBuilder>) {
     val winnings = readFile.map { cardData ->
         Cards(cardData, jIsWeak = true)
-    }.let(::findScores).apply {
-        check(this == 251421071) { "Expected: 251421071 Got: $this" }
-    }
+    }.let(::findScores)
 
-    println("The new total winnings is $winnings")
+    validate("The new total winnings is", winnings, 251421071)
 }
 
 private fun findScores(cards: List<Cards>): Int = cards
-        .sortedWith(compareBy({ it.pokerHandType }, { it.cardData }))
-        .reversed()
-        .mapIndexed { index: Int, card: Cards ->
-            (index + 1) * card.bid
-        }.sum()
+    .sortedWith(compareBy({ it.pokerHandType }, { it.cardData }))
+    .reversed()
+    .mapIndexed { index: Int, card: Cards ->
+        (index + 1) * card.bid
+    }.sum()
 
 private data class Cards(var cardData: StringBuilder, val jIsWeak: Boolean) {
     val pokerHandType: PokerHandType

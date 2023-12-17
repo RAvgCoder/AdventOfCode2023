@@ -1,4 +1,5 @@
 import HelperUtils.Utils.runPart
+import HelperUtils.Utils.validate
 
 /**
  * https://adventofcode.com/2023/day/4
@@ -13,13 +14,13 @@ private fun part1(cardsList: List<StringBuilder>) {
         (1 shl Card(line).matchingCardsCount) shr 1 // (1 << match) >> 1
     }
 
-    println("Points won in total is $points")
+    validate("Points won in total is", points, 28538)
 }
 
 
 private fun part2(listOfCards: List<StringBuilder>) {
     // Perform operations to determine the total number of scratchcards obtained
-    val sum = arrayListOf<MutableList<Card>>().let { cardList ->
+    val numOfScratchcards = arrayListOf<MutableList<Card>>().let { cardList ->
         // Initialize an empty cardList and populate it with Cards created from the StringBuilder instances
         listOfCards.asSequence().forEach { cardList.add(arrayListOf(Card(it))) }
 
@@ -40,7 +41,7 @@ private fun part2(listOfCards: List<StringBuilder>) {
         cardList.sumOf { it.size }
     }
 
-    println("Total scratchcards you end up with is $sum")
+    validate("Total scratchcards you end up with is", numOfScratchcards, 9425061)
 }
 
 

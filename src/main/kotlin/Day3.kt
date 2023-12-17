@@ -1,5 +1,6 @@
 import HelperUtils.Direction
 import HelperUtils.Utils.runPart
+import HelperUtils.Utils.validate
 
 
 /**
@@ -11,7 +12,7 @@ fun main() {
 }
 
 private fun part1(readFile: List<StringBuilder>) {
-    var sum = 0 // Initialize the sum of part numbers
+    var sumOfParts = 0 // Initialize the sum of part numbers
     var currNumber = 0 // Initialize the current number being processed
     val startingCoordinates = arrayOf(0, 0) // Array to store starting coordinates
 
@@ -23,7 +24,7 @@ private fun part1(readFile: List<StringBuilder>) {
             // If a number is being built and the row changes
             if (currNumber != 0 && startingCoordinates[0] != i) {
                 // Check if the part number is valid and add it to the sum if valid
-                if (isValidPart(readFile, startingCoordinates, currNumber)) sum += currNumber
+                if (isValidPart(readFile, startingCoordinates, currNumber)) sumOfParts += currNumber
 
                 // Reset the current number and update coordinates if the current character is a digit
                 currNumber = 0
@@ -34,7 +35,7 @@ private fun part1(readFile: List<StringBuilder>) {
                 }
             } else if (!curr.isDigit() && currNumber != 0) {
                 // If encountering a non-digit and a number is being built, check and add to the sum if valid
-                if (isValidPart(readFile, startingCoordinates, currNumber)) sum += currNumber
+                if (isValidPart(readFile, startingCoordinates, currNumber)) sumOfParts += currNumber
 
                 // Reset the current number
                 currNumber = 0
@@ -50,7 +51,7 @@ private fun part1(readFile: List<StringBuilder>) {
         }
     }
 
-    println("Sum of all of the part numbers in the engine schematic is $sum")
+    validate("Sum of all of the part numbers in the engine schematic is", sumOfParts, 521515)
 }
 
 private fun isValidPart(readFile: List<StringBuilder>, pos: Array<Int>, currNumber: Int): Boolean {
@@ -101,7 +102,7 @@ private fun part2(input: List<StringBuilder>) {
         }
     }
 
-    println("Gear ratios produced $sum")
+    validate("Gear ratios produced", sum, 69527306)
 }
 
 private val directions = Direction.entries

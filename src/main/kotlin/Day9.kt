@@ -16,8 +16,7 @@ private fun part1(readFile: List<StringBuilder>) {
     val extrapolatedSum =
         levels.sumOf { level -> sumGenSeq(level) }
 
-    println("The sum of the extrapolated values is $extrapolatedSum")
-    validate(extrapolatedSum, 1834108701)
+    validate("The sum of the extrapolated values is", extrapolatedSum, 1834108701)
 }
 
 private fun part2(readFile: List<StringBuilder>) {
@@ -26,14 +25,13 @@ private fun part2(readFile: List<StringBuilder>) {
     val extrapolatedSum =
         levels.sumOf { level -> sumGenSeq(level.reversed()) }
 
-    println("The sum of the extrapolated values is $extrapolatedSum")
-    validate(extrapolatedSum, 993)
+    validate("The sum of the extrapolated values is", extrapolatedSum, 993)
 }
 
 
-private fun sumGenSeq(sequence: List<Int>) : Int =
+private fun sumGenSeq(sequence: List<Int>): Int =
     if (sequence.any { it != 0 })
-        sequence.last() + sumGenSeq(sequence.zipWithNext { a: Int, b: Int -> b - a})
+        sequence.last() + sumGenSeq(sequence.zipWithNext { a: Int, b: Int -> b - a })
     else 0
 
 private fun setUp(readFile: List<StringBuilder>): List<List<Int>> =

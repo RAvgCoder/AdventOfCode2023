@@ -13,8 +13,7 @@ fun main() {
 private fun part1(readFile: List<StringBuilder>) {
     val words = setUP(readFile)
     val sum = words.sumOf(::hash)
-    println("The sum of the results is $sum")
-    validate(sum, 509152)
+    validate("The sum of the results is", sum, 509152)
 }
 
 private fun part2(readFile: List<StringBuilder>) {
@@ -35,9 +34,7 @@ private fun part2(readFile: List<StringBuilder>) {
 
     val focusingPower = getFocusingPower(boxes)
 
-    println("The the focusing power of the resulting lens configuration is $focusingPower")
-
-    validate(focusingPower, 244403)
+    validate("The the focusing power of the resulting lens configuration is", focusingPower, 244403)
 }
 
 private fun findAndChangeFocalLength(
