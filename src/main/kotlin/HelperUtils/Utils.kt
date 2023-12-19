@@ -173,6 +173,23 @@ object Utils {
             }
         println("File successfully created at location: $filPath")
     }
+
+    /**
+     * NOT A STABLE METHOD. ARGUMENT TYPE IS SUBJECT TO CHANGE. MEANT FOR TESTING PURPOSES
+     */
+    fun dumpArrayToFile(map: Array<CharArray>) {
+        File("DUMP").bufferedWriter().use { writer ->
+            map.forEach { arr ->
+                writer.write(StringBuilder().let {
+                    for (c in arr) {
+                        it.append(c)
+                    }
+                    it.toString()
+                })
+                writer.write("\n")
+            }
+        }
+    }
     // ----------------------------- [File_Utils_END] ----------------------------- \\
 
 }
