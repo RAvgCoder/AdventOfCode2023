@@ -28,24 +28,6 @@ private fun part1(map: List<CharArray>) {
     validate("The number of tiles ended up being energized is", energizedPaths, 8034)
 }
 
-private fun getNumOfEnergizedPaths(map: List<CharArray>, ray: MutableList<Ray>): Int {
-    var rays = ray
-    val pathsForOriginalRayFired = ray.first().path
-
-    do {
-        rays = rays.let { list ->
-            list.mapNotNull { ray -> moveRay(ray, map) }
-                .forEach { rays.add(it) }
-
-            rays.filter { it.isAlive }.toMutableList()
-        }
-    } while (rays.isNotEmpty())
-
-    return pathsForOriginalRayFired.map {
-        it.split("\\s+".toRegex())[1]
-    }.distinct().size
-}
-
 private fun part2(map: List<CharArray>) {
     val rays = mutableListOf<Ray>()
 
@@ -64,13 +46,29 @@ private fun part2(map: List<CharArray>) {
 
     val energizedPaths = rays.maxOf { ray -> getNumOfEnergizedPaths(map, mutableListOf(ray)) }
 
-    println("The number of tiles ended up being energized the most is $energizedPaths")
-
     validate("The number of tiles ended up being energized is", energizedPaths, 8225)
 }
 
+private fun getNumOfEnergizedPaths(map: List<CharArray>, ray: MutableList<Ray>): Int {
+    var rays = ray
+    val pathsForOriginalRayFired = ray.first().path
+
+    do {
+        rays = rays.let { list ->
+            list.mapNotNull { ray -> moveRay(ray, map) }
+                .forEach { rays.add(it) }
+
+            rays.filter { it.isAlive }.toMutableList()
+        }
+    } while (rays.isNotEmpty())
+
+    return pathsForOriginalRayFired.map {
+        it.split("\\s+".toRegex())[1]
+    }.distinct().size
+}
+
 private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {
-    val coordinate = ray.coordinate.copy()
+    val coordinate = ray.coordinate.clone()
     val direction = ray.direction.copy()
     var extraRay: Ray? = null
 
@@ -139,7 +137,7 @@ private data class Ray(
             isAlive = false
         else {
             path.add(hash)
-            coordinate.move(direction)
+            coordinate.offsetBy(direction)
         }
     }
 
@@ -147,7 +145,7 @@ private data class Ray(
         return Ray(
             direction.copy(),
             true,
-            coordinate.copy(),
+            coordinate.clone(),
             path
         )
     }

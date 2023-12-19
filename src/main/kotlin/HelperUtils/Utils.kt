@@ -6,16 +6,25 @@ import java.time.Year
 import kotlin.time.measureTimedValue
 
 object Utils {
-    fun validate(message: String, givenLong: Long, expected: Long) {
-        check(givenLong == expected) { "Your result=$givenLong but expected $expected" }
-        println("$message $givenLong")
+    /**
+     * Creates a file for a new day
+     */
+    @JvmStatic
+    fun main(args: Array<String>) {
+        newDay(18)
     }
 
-    fun validate(message: String, givenInt: Int, expected: Int) {
-        check(givenInt == expected) { "Your result is $givenInt but expected $expected" }
-        println("$message $givenInt")
-    }
-
+    // ----------------------------- [Core_Utils] ----------------------------- \\
+    /**
+     * Executes a specific function associated with a day and part of a programming challenge.
+     * This function is capable of handling different types of input data and measures the execution time of the associated function.
+     *
+     * @param T The type of input data.
+     * @param dayFuncToRun A function that operates on a list of elements of type T.
+     * @param partNum      An integer indicating the part of the challenge.
+     * @param dayNum       (Optional) An integer representing the day of the challenge (defaults to 0 if not provided).
+     * @throws IllegalArgumentException If an unsupported type is encountered.
+     */
     inline fun <reified T> runPart(
         dayFuncToRun: (List<T>) -> Unit,
         partNum: Int,
@@ -39,6 +48,59 @@ object Utils {
             dayFuncToRun(readFile as List<T>)
         }
         println("Time: ${elapsedTime.inWholeMilliseconds}ms\n")
+    }
+
+    fun validate(message: String, givenLong: Long, expected: Long) {
+        check(givenLong == expected) { "Your result=$givenLong but expected $expected" }
+        println("$message $givenLong")
+    }
+
+    fun validate(message: String, givenInt: Int, expected: Int) {
+        check(givenInt == expected) { "Your result is $givenInt but expected $expected" }
+        println("$message $givenInt")
+    }
+
+    // ----------------------------- [Core_Utils_END] ----------------------------- \\
+
+
+    // ----------------------------- [Printers] ----------------------------- \\
+    fun print2D(arr: Array<Array<Any>>) =
+        StringBuilder().apply {
+            arr.forEach { colm ->
+                colm.forEach { elem ->
+                    append("$elem\t")
+                }
+                append("\n")
+            }
+            println(this)
+        }
+
+    fun print2D(arr: List<CharArray>) =
+        StringBuilder().apply {
+            arr.forEach { line ->
+                line.forEach { char ->
+                    append("$char\t")
+                }
+                append("\n")
+            }
+            println(this)
+        }
+
+    // ----------------------------- [Printers_END] ----------------------------- \\
+
+
+    // ----------------------------- [File_Utils] ----------------------------- \\
+    /**
+     * Retrieves the file path of the base directory for the project.
+     *
+     * @return A string representing the base directory path for the project.
+     */
+    private fun getFilePath(): String {
+        // Uses this to get the base dir eg "~/.../WordPuzzleSolver"
+        var currentDirectory = System.getProperty("user.dir")
+        if (!currentDirectory.endsWith("src"))
+            currentDirectory += "/src"
+        return currentDirectory
     }
 
 
@@ -68,48 +130,11 @@ object Utils {
             }
     }
 
-    private fun getFilePath(): String {
-        // Uses this to get the base dir eg "~/.../WordPuzzleSolver"
-        var currentDirectory = System.getProperty("user.dir")
-        if (!currentDirectory.endsWith("src"))
-            currentDirectory += "/src"
-        return currentDirectory
-    }
-
     /**
-     * Prints a 2D array.
+     * Creates a new Kotlin file for a specific day of a programming challenge, populating it with a template structure.
      *
-     * @param arr the 2D array to be printed
-     */
-    fun print2D(arr: Array<Array<Any>>) =
-        StringBuilder().apply {
-            arr.forEach { colm ->
-                colm.forEach {
-                    append("$it\t")
-                }
-                append("\n")
-            }
-            println(this)
-        }
-
-
-    fun print2D(arr: List<CharArray>) =
-        StringBuilder().apply {
-            arr.forEach { line ->
-                line.forEach {
-                    append("$it\t")
-                }
-                append("\n")
-            }
-            println(this)
-        }
-
-
-    /**
-     * Creates a new Kotlin file for a specific day.
-     *
-     * @param dayNum The number of the day for which the file is created.
-     *               This should be a positive integer value.
+     * @param dayNum An integer representing the day for which the new Kotlin file is created.
+     * @throws FileAlreadyExistsException If the file for the given day already exists.
      */
     private fun newDay(dayNum: Int) {
         val filPath = "${getFilePath()}\\main\\kotlin\\Day$dayNum.kt";
@@ -121,8 +146,8 @@ object Utils {
                     )
             }
             .bufferedWriter()
-            .use {
-                it.write(
+            .use { writer ->
+                writer.write(
                     """
                     import HelperUtils.Utils.runPart
                     import HelperUtils.Utils.validate
@@ -148,9 +173,6 @@ object Utils {
             }
         println("File successfully created at location: $filPath")
     }
+    // ----------------------------- [File_Utils_END] ----------------------------- \\
 
-    @JvmStatic
-    fun main(args: Array<String>) {
-        newDay(17)
-    }
 }
