@@ -5,7 +5,22 @@ package HelperUtils
  * @property x The x-coordinate.
  * @property y The y-coordinate.
  */
-class Coordinate2D(var x: Int, var y: Int) {
+class Coordinate2D(var x: Long, var y: Long) {
+
+    /**
+     * Gets the integerForm of a coordinate x pos
+     */
+
+    fun get_X(): Int {
+        return x.toInt()
+    }
+
+    /**
+     * Gets the integerForm of a coordinate y pos
+     */
+    fun get_Y(): Int {
+        return y.toInt()
+    }
 
     /**
      * Checks if the current coordinate is within the specified bounds.
@@ -16,7 +31,7 @@ class Coordinate2D(var x: Int, var y: Int) {
      * @param endY   The ending y-coordinate of the bound (exclusive).
      * @return True if the coordinate is within the bounds, otherwise false.
      */
-    fun isValid(startX: Int = 0, startY: Int = 0, endX: Int, endY: Int): Boolean {
+    fun isValid(startX: Long = 0, startY: Long = 0, endX: Long, endY: Long): Boolean {
         return (x in startX..<endX) && (y in startY..<endY)
     }
 
