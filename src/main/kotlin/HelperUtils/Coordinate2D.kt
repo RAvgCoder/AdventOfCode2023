@@ -1,20 +1,40 @@
 package HelperUtils
 
 /**
- * Coordinate(x,y) | (i,j)
+ * Represents a 2D coordinate (x, y).
+ * @property x The x-coordinate.
+ * @property y The y-coordinate.
  */
 class Coordinate2D(var x: Int, var y: Int) {
 
+    /**
+     * Checks if the current coordinate is within the specified bounds.
+     *
+     * @param startX The starting x-coordinate of the bound.
+     * @param startY The starting y-coordinate of the bound.
+     * @param endX   The ending x-coordinate of the bound (exclusive).
+     * @param endY   The ending y-coordinate of the bound (exclusive).
+     * @return True if the coordinate is within the bounds, otherwise false.
+     */
     fun isValid(startX: Int = 0, startY: Int = 0, endX: Int, endY: Int): Boolean {
         return (x in startX..<endX) && (y in startY..<endY)
     }
 
+    /**
+     * Moves the coordinate by the specified direction.
+     *
+     * @param direction The direction by which the coordinate should be moved.
+     */
     fun offsetBy(direction: Direction) {
         x += direction.x
         y += direction.y
     }
 
-    // ------------------------------------
+    /**
+     * Clones the current coordinate.
+     *
+     * @return A new instance of Coordinate2D with the same x and y values as the original.
+     */
     fun clone(): Coordinate2D {
         return Coordinate2D(x, y)
     }
@@ -34,8 +54,6 @@ class Coordinate2D(var x: Int, var y: Int) {
     }
 
     override fun hashCode(): Int {
-        var result = x
-        result = 31 * result + y
-        return result
+        return toString().hashCode()
     }
 }
