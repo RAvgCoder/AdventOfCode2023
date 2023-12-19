@@ -4,7 +4,6 @@ import HelperUtils.Direction.EAST
 import HelperUtils.Direction.WEST
 import HelperUtils.Utils.runPart
 import HelperUtils.Utils.validate
-import java.io.File
 
 /**
  * https://adventofcode.com/2023/day/18
@@ -15,17 +14,27 @@ fun main() {
     runPart(::part2, 2, 18)
 }
 
-private const val MAP_SIZE = 2000
+// Used for part1
+private const val MAP_SIZE: Long = 900
+private const val START: Long = MAP_SIZE / 6
 private const val EMPTY_SPACE = '.'
 private const val BORDER = '#'
 private const val FILLER = 'X'
 
-private fun part1(readFile: List<StringBuilder>) {
+private fun part1(rawFileData: List<StringBuilder>) {
     // Create the map
-    val map = Array<CharArray>(MAP_SIZE) { CharArray(MAP_SIZE) { EMPTY_SPACE } }
+    val map = Array<CharArray>(MAP_SIZE.toInt()) { CharArray(MAP_SIZE.toInt()) { EMPTY_SPACE } }
 
     // Step 1: Set up borders on the map based on the provided input data
-    setUpBorders(readFile, map)
+
+    val instructions = rawFileData.map { inst ->
+        // Split the instruction and convert it into a pair
+        inst.split(" ").let { split ->
+            getDirection(split[0][0]) to split[1].toLong()
+        }
+    }
+
+    setUpBorders(instructions, map)
 
     // Step 2: Fills in the bounds of a map.
     fillBounds(map)
@@ -41,8 +50,56 @@ private fun part1(readFile: List<StringBuilder>) {
 }
 
 
-private fun part2(readFile: List<StringBuilder>) {
-    validate("", 0, 0)
+private fun part2(rawFileData: List<StringBuilder>) {
+    val instructions = rawFileData.map { line ->
+        // Split the instruction and convert it into a Triple
+        val hex = line.split(" ")[2]
+            .removePrefix("(")
+            .removeSuffix(")")
+
+        val distance = hex.substring(1..5)
+            .toLong(radix = 16)
+        val direction = getDirection(hex.last())
+        direction to distance
+    }
+
+    // Generate points traversed
+    val coordinate = Coordinate2D(START, START)
+
+    // Process each instruction to determine movements and steps
+    var numOfBoundaryPoints: Long = 0
+    val boundaryPoints =
+        instructions.foldIndexed(mutableListOf<Coordinate2D>()) { i, acc, (direction, step) ->
+            if (i == 0) acc.add(coordinate.clone())
+            // Apply steps in the specified direction & Record the position after movement
+            numOfBoundaryPoints += step
+            acc.add(coordinate.apply {
+                this.x += (direction.x * step)
+                this.y += (direction.y * step)
+            }.clone())
+            acc
+        }.reversed()
+
+    // Calculate area using the Shoelace theorem
+    val shoeLaceArea = boundaryPoints.zipWithNext { point1: Coordinate2D, point2: Coordinate2D ->
+        (point1.x * point2.y) - (point1.y * point2.x)
+    }.sum() / 2
+
+    println("BoundaryPoints: $numOfBoundaryPoints")
+    println("ShoeLace theorem: $shoeLaceArea")
+    println("Pick's theorem: ${(shoeLaceArea + 1 - (numOfBoundaryPoints / 2))}")
+
+    /*
+     *  Apply Pick's Theorem
+     *  A = Area
+     *  i = Points inside the area
+     *  b = Num of boundary points
+     *
+     *  A = i + (b/2) - 1 => i = A + 1 - (b/2)
+     */
+    val cubicMeters = (shoeLaceArea + 1 - (numOfBoundaryPoints / 2)) + numOfBoundaryPoints
+
+    validate("The cubic meters of lava the dig plan could hold is", cubicMeters, 85070763635666)
 }
 
 /**
@@ -155,49 +212,42 @@ fun getTopLeftBorder(map: Array<CharArray>): Coordinate2D {
     // Find the x-coordinate of the first border character in the line found above
     val xCoord = map[yCoord].indexOfFirst { it == BORDER }
 
-    return Coordinate2D(yCoord, xCoord)
+    return Coordinate2D(yCoord.toLong(), xCoord.toLong())
 }
-
 
 /**
  * Sets up borders on a map based on provided raw file data.
  *
- * @param rawFileData The raw data obtained from a file.
+ * @param instructions The raw data obtained from a file.
  * @param map         The 2D array representing the map.
  */
 private fun setUpBorders(
-    rawFileData: List<StringBuilder>, map: Array<CharArray>
+    instructions: List<Pair<Direction, Long>>, map: Array<CharArray>
 ) {
     // Starting coordinate at the center of the map
-    val coordinate = Coordinate2D(MAP_SIZE / 4, MAP_SIZE / 4)
+    val coordinate = Coordinate2D(START, START)
 
     // Process each instruction to determine movements and steps
-    rawFileData.map { inst ->
-        // Split the instruction and convert it into a Triple
-        inst.split(" ").let { split ->
-            Triple(
-                when (split[0][0]) {
-                    'U' -> Direction.NORTH
-                    'D' -> Direction.SOUTH
-                    'R' -> EAST
-                    'L' -> WEST
-                    else -> throw IllegalArgumentException("Cannot switch on ${split[0][0]}")
-                },
-                split[1].toInt(),
-                // (#7a21e3) -> #7a21e3
-                split[2].removePrefix("(").removeSuffix(")")
-            )
-        }
-    }.forEach { (direction, step, _) ->
+    instructions.forEach { (direction, step) ->
         // Write the initial position to the map
         writePosToMap(map, coordinate)
 
         // Apply steps in the specified direction
-        repeat(step) {
+        (0..<step).forEach { _ ->
             coordinate.offsetBy(direction)
             // Record the position after movement
             writePosToMap(map, coordinate)
         }
+    }
+}
+
+private fun getDirection(char: Char): Direction {
+    return when (char) {
+        'U', '3' -> Direction.NORTH
+        'D', '1' -> Direction.SOUTH
+        'R', '0' -> EAST
+        'L', '2' -> WEST
+        else -> throw IllegalArgumentException("Cannot switch on $char")
     }
 }
 
@@ -217,7 +267,7 @@ fun canColor(
     val next = tmpCoord + direction
 
     // Check if it's not possible to move in the specified direction and the next cell is not a specific filler character
-    return !canMove(tmpCoord, direction, map) && map[next.x][next.y] != FILLER
+    return !canMove(tmpCoord, direction, map) && map[next.get_X()][next.get_Y()] != FILLER
 }
 
 /**
@@ -235,7 +285,7 @@ fun canMove(
     val next = currCoord + direction
 
     // Check if the cell in the next direction is a border
-    return map[next.x][next.y] == BORDER
+    return map[next.get_X()][next.get_Y()] == BORDER
 }
 
 /**
@@ -246,57 +296,5 @@ fun canMove(
  * @param symbol     The symbol to write to the map
  */
 private fun writePosToMap(map: Array<CharArray>, coordinate: Coordinate2D, symbol: Char = BORDER) {
-    map[coordinate.x][coordinate.y] = symbol
-}
-
-
-fun print2D(map: Array<StringBuilder>) = StringBuilder().apply {
-    map.onEach { line ->
-        line.onEach { char ->
-            append("$char\t")
-        }
-        append("\n")
-    }
-    println(this)
-}
-
-
-fun test(): Array<CharArray> {
-    return arrayOf(
-        StringBuilder("..................................."),
-        StringBuilder(".......................#######....."),
-        StringBuilder(".......................#.....#....."),
-        StringBuilder(".......................#.....#....."),
-        StringBuilder(".................#######.....#....."),
-        StringBuilder(".................#...........#....."),
-        StringBuilder(".................#...........#....."),
-        StringBuilder(".................#...........#....."),
-        StringBuilder("..............####...........#....."),
-        StringBuilder("..........#####..............#....."),
-        StringBuilder("..........#.............######....."),
-        StringBuilder("..........#.............#.........."),
-        StringBuilder("..........#####.........#.........."),
-        StringBuilder("..............####......#.........."),
-        StringBuilder(".................########.........."),
-        StringBuilder("..................................."),
-    ).map {
-        val charArray = CharArray(it.length) { '.' }
-        it.forEachIndexed { i, c -> charArray[i] = c }
-        charArray
-    }.toTypedArray()
-}
-
-
-private fun dumpToFile(map: Array<CharArray>) {
-    File("DUMP").bufferedWriter().use { writer ->
-        map.forEach { arr ->
-            writer.write(StringBuilder().let {
-                for (c in arr) {
-                    it.append(c)
-                }
-                it.toString()
-            })
-            writer.write("\n")
-        }
-    }
+    map[coordinate.get_X()][coordinate.get_Y()] = symbol
 }
