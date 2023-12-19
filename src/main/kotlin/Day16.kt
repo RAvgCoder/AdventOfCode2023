@@ -33,14 +33,14 @@ private fun part2(map: List<CharArray>) {
 
     // Rays for the left and right areas of the map
     map.forEachIndexed { index, _ ->
-        rays.add(Ray(EAST, true, Coordinate2D(index, 0), mutableSetOf<String>()))
-        rays.add(Ray(WEST, true, Coordinate2D(index, map[0].lastIndex), mutableSetOf<String>()))
+        rays.add(Ray(EAST, true, Coordinate2D(index.toLong(), 0), mutableSetOf<String>()))
+        rays.add(Ray(WEST, true, Coordinate2D(index.toLong(), map[0].lastIndex.toLong()), mutableSetOf<String>()))
     }
 
     // Rays for top and bottom areas of the map
     map[0].forEachIndexed { index, _ ->
-        rays.add(Ray(SOUTH, true, Coordinate2D(0, index), mutableSetOf<String>()))
-        rays.add(Ray(NORTH, true, Coordinate2D(map.lastIndex, index), mutableSetOf<String>()))
+        rays.add(Ray(SOUTH, true, Coordinate2D(0, index.toLong()), mutableSetOf<String>()))
+        rays.add(Ray(NORTH, true, Coordinate2D(map.lastIndex.toLong(), index.toLong()), mutableSetOf<String>()))
     }
 
 
@@ -72,12 +72,12 @@ private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {
     val direction = ray.direction.copy()
     var extraRay: Ray? = null
 
-    if (!coordinate.isValid(endX = map[0].size, endY = map.size)) {
+    if (!coordinate.isValid(endX = map[0].size.toLong(), endY = map.size.toLong())) {
         ray.isAlive = false
         return null
     }
 
-    when (map[coordinate.x][coordinate.y]) {
+    when (map[coordinate.get_X()][coordinate.get_Y()]) {
         '.' -> ray.move()
         '-' -> {
             if (direction == EAST || direction == WEST) ray.move()
@@ -119,7 +119,7 @@ private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {
             ray.move()
         }
 
-        else -> throw IllegalStateException("Illegal state ${map[coordinate.x][coordinate.y]}")
+        else -> throw IllegalStateException("Illegal state ${map[coordinate.get_X()][coordinate.get_Y()]}")
     }
 
     return extraRay
