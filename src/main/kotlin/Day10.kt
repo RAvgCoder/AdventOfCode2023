@@ -94,7 +94,7 @@ private fun part2(map: List<CharArray>) {
     validate("Num of steps along it takes to get from the starting to the farthest point is", steps, 0)
 }
 
-fun canMoveTo(currentPos: IntArray, prevPos: IntArray, map: List<CharArray>): Direction? {
+private fun canMoveTo(currentPos: IntArray, prevPos: IntArray, map: List<CharArray>): Direction? {
     if (currentPos[0] !in map.indices || currentPos[1] !in map[0].indices)
         return null
 
@@ -153,7 +153,7 @@ fun canMoveTo(currentPos: IntArray, prevPos: IntArray, map: List<CharArray>): Di
     }
 }
 
-fun findS(map: List<CharArray>): IntArray {
+private fun findS(map: List<CharArray>): IntArray {
     for (i in map.indices) {
         for (j in map[0].indices) {
             if (map[i][j] == 'S') {

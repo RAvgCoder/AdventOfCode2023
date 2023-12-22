@@ -7,6 +7,8 @@ package HelperUtils
  */
 class Coordinate2D(var x: Long, var y: Long) {
 
+    constructor(x: Int, y: Int) : this(x.toLong(), y.toLong())
+
     /**
      * Gets the integerForm of a coordinate x pos
      */
@@ -32,6 +34,19 @@ class Coordinate2D(var x: Long, var y: Long) {
      * @return True if the coordinate is within the bounds, otherwise false.
      */
     fun isValid(startX: Long = 0, startY: Long = 0, endX: Long, endY: Long): Boolean {
+        return (x in startX..<endX) && (y in startY..<endY)
+    }
+
+    /**
+     * Checks if the current coordinate is within the specified bounds.
+     *
+     * @param startX The starting x-coordinate of the bound.
+     * @param startY The starting y-coordinate of the bound.
+     * @param endX   The ending x-coordinate of the bound (exclusive).
+     * @param endY   The ending y-coordinate of the bound (exclusive).
+     * @return True if the coordinate is within the bounds, otherwise false.
+     */
+    fun isValid(startX: Int = 0, startY: Int = 0, endX: Int, endY: Int): Boolean {
         return (x in startX..<endX) && (y in startY..<endY)
     }
 
@@ -62,6 +77,13 @@ class Coordinate2D(var x: Long, var y: Long) {
 
     infix operator fun plus(dir: Direction): Coordinate2D {
         return Coordinate2D(this.x + dir.x, this.y + dir.y)
+    }
+
+    operator fun component1(): Long {
+        return x
+    }
+    operator fun component2(): Long {
+        return y
     }
 
     override fun toString(): String {

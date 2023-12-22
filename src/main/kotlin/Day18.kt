@@ -85,10 +85,6 @@ private fun part2(rawFileData: List<StringBuilder>) {
         (point1.x * point2.y) - (point1.y * point2.x)
     }.sum() / 2
 
-    println("BoundaryPoints: $numOfBoundaryPoints")
-    println("ShoeLace theorem: $shoeLaceArea")
-    println("Pick's theorem: ${(shoeLaceArea + 1 - (numOfBoundaryPoints / 2))}")
-
     /*
      *  Apply Pick's Theorem
      *  A = Area
@@ -100,6 +96,10 @@ private fun part2(rawFileData: List<StringBuilder>) {
     val cubicMeters = (shoeLaceArea + 1 - (numOfBoundaryPoints / 2)) + numOfBoundaryPoints
 
     validate("The cubic meters of lava the dig plan could hold is", cubicMeters, 85070763635666)
+
+    println("BoundaryPoints: $numOfBoundaryPoints")
+    println("ShoeLace theorem: $shoeLaceArea")
+    println("Pick's theorem: ${(shoeLaceArea + 1 - (numOfBoundaryPoints / 2))}")
 }
 
 /**
@@ -184,7 +184,7 @@ private fun colorColumn(
  * @param currCoord  The current coordinate.
  * @return The next direction to follow.
  */
-fun nextDir(currDir: Direction, map: Array<CharArray>, currCoord: Coordinate2D): Direction {
+private fun nextDir(currDir: Direction, map: Array<CharArray>, currCoord: Coordinate2D): Direction {
     // Get the list of all directions (NORTH, SOUTH, EAST, WEST)
     return Direction.getDirNSEW().toMutableList().apply {
         // Remove the current direction and the opposite direction
@@ -203,7 +203,7 @@ fun nextDir(currDir: Direction, map: Array<CharArray>, currCoord: Coordinate2D):
  * @param map The 2D array representing the map.
  * @return The top-left border coordinate.
  */
-fun getTopLeftBorder(map: Array<CharArray>): Coordinate2D {
+private fun getTopLeftBorder(map: Array<CharArray>): Coordinate2D {
     // Find the y-coordinate of the first line that contains a border character
     val yCoord = map.indexOfFirst { line ->
         line.any { it == BORDER }
@@ -212,7 +212,7 @@ fun getTopLeftBorder(map: Array<CharArray>): Coordinate2D {
     // Find the x-coordinate of the first border character in the line found above
     val xCoord = map[yCoord].indexOfFirst { it == BORDER }
 
-    return Coordinate2D(yCoord.toLong(), xCoord.toLong())
+    return Coordinate2D(yCoord, xCoord)
 }
 
 /**
@@ -260,7 +260,7 @@ private fun getDirection(char: Char): Direction {
  * @param map        The 2D array representing the map.
  * @return True if the coordinate can be colored, otherwise false.
  */
-fun canColor(
+private fun canColor(
     tmpCoord: Coordinate2D, direction: Direction, map: Array<CharArray>
 ): Boolean {
     // Calculate the next coordinate based on the direction
@@ -278,7 +278,7 @@ fun canColor(
  * @param map        The 2D array representing the map.
  * @return True if movement is possible, otherwise false.
  */
-fun canMove(
+private fun canMove(
     currCoord: Coordinate2D, direction: Direction, map: Array<CharArray>
 ): Boolean {
     // Calculate the next coordinate based on the direction

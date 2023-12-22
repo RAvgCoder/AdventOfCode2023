@@ -33,14 +33,14 @@ private fun part2(map: List<CharArray>) {
 
     // Rays for the left and right areas of the map
     map.forEachIndexed { index, _ ->
-        rays.add(Ray(EAST, true, Coordinate2D(index.toLong(), 0), mutableSetOf<String>()))
-        rays.add(Ray(WEST, true, Coordinate2D(index.toLong(), map[0].lastIndex.toLong()), mutableSetOf<String>()))
+        rays.add(Ray(EAST, true, Coordinate2D(index, 0), mutableSetOf<String>()))
+        rays.add(Ray(WEST, true, Coordinate2D(index, map[0].lastIndex), mutableSetOf<String>()))
     }
 
     // Rays for top and bottom areas of the map
     map[0].forEachIndexed { index, _ ->
-        rays.add(Ray(SOUTH, true, Coordinate2D(0, index.toLong()), mutableSetOf<String>()))
-        rays.add(Ray(NORTH, true, Coordinate2D(map.lastIndex.toLong(), index.toLong()), mutableSetOf<String>()))
+        rays.add(Ray(SOUTH, true, Coordinate2D(0, index), mutableSetOf<String>()))
+        rays.add(Ray(NORTH, true, Coordinate2D(map.lastIndex, index), mutableSetOf<String>()))
     }
 
 
@@ -125,7 +125,7 @@ private fun moveRay(ray: Ray, map: List<CharArray>): Ray? {
     return extraRay
 }
 
-private data class Ray(
+private class Ray(
     var direction: Direction,
     var isAlive: Boolean,
     val coordinate: Coordinate2D,

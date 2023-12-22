@@ -11,7 +11,7 @@ object Utils {
      */
     @JvmStatic
     fun main(args: Array<String>) {
-        newDay(18)
+        newDay(21)
     }
 
     // ----------------------------- [Core_Utils] ----------------------------- \\

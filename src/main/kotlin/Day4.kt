@@ -45,8 +45,8 @@ private fun part2(listOfCards: List<StringBuilder>) {
 }
 
 
-// Define a data class `Card` with a property `rawData` of type `StringBuilder`
-private data class Card(val rawData: StringBuilder) {
+// Define a class `Card` with a property `rawData` of type `StringBuilder`
+private class Card(rawData: StringBuilder) {
 
     // Define a property `matchingCardsCount` initialized using a let block
     val matchingCardsCount: Int = rawData.split("[:|]".toRegex()).let { cardLine ->
